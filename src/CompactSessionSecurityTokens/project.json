@@ -1,0 +1,17 @@
+{
+    "version": "1.0.0-alpha1",
+    "description": "Compact session security tokens for Windows Identity Foundation",
+    "authors": [ "tintoy" ],
+    "tags": [ "wif", "session", "security", "securitytoken", "token" ],
+    "projectUrl": "https://github.com/tintoy/CompactSessionSecurityTokens",
+    "licenseUrl": "https://raw.githubusercontent.com/tintoy/CompactSessionSecurityTokens/master/LICENSE",
+
+    "frameworks": {
+        "net451": {
+            "frameworkAssemblies": {
+                "System.IdentityModel": "4.0.0.0",
+                "System.identitymodel.services": "4.0.0.0"
+            }
+        }
+    }
+}
