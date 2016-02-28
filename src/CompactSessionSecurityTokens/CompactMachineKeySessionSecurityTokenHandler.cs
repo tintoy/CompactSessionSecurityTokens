@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IdentityModel.Tokens;
+using System.IdentityModel.Services.Tokens;
 using System.Linq;
 using System.Security.Claims;
 using System.Xml;
@@ -9,13 +10,13 @@ using System.Xml;
 namespace CompactSessionSecurityTokens
 {
 	/// <summary>
-	///		A <see cref="SessionSecurityTokenHandler"/> that generates tokens with compacted identifiers.
+	///		A <see cref="MachineKeySessionSecurityTokenHandler"/> that generates tokens with compacted identifiers.
 	/// </summary>
 	/// <remarks>
-	///		Cookies are protected using application pool identity (use <see cref="CompactMachineKeySessionSecurityTokenHandler"/> if you need support for web farms).
+	///		Required for web farms.
 	/// </remarks>
-	public sealed class CompactSessionSecurityTokenHandler
-		: SessionSecurityTokenHandler
+	public sealed class CompactMachineKeySessionSecurityTokenHandler
+		: MachineKeySessionSecurityTokenHandler
 	{
 		/// <summary>
 		///		Map from expanded claim identifiers to compacted claim identifiers.
@@ -23,9 +24,9 @@ namespace CompactSessionSecurityTokens
 		readonly ClaimMapper _mapper;
 
 		/// <summary>
-		///		Create a new <see cref="CompactSessionSecurityTokenHandler"/>.
+		///		Create a new <see cref="CompactMachineKeySessionSecurityTokenHandler"/>.
 		/// </summary>
-		public CompactSessionSecurityTokenHandler()
+		public CompactMachineKeySessionSecurityTokenHandler()
 		{
 			// Mappings will come from configuration.
 			_mapper = new ClaimMapper();
@@ -37,7 +38,7 @@ namespace CompactSessionSecurityTokens
 		/// <param name="claimCompactionMap">
 		///		Mappings from expanded claim type identifiers to compacted ones.
 		/// </param>
-		public CompactSessionSecurityTokenHandler(IReadOnlyDictionary<string, string> claimCompactionMap)
+		public CompactMachineKeySessionSecurityTokenHandler(IReadOnlyDictionary<string, string> claimCompactionMap)
 		{
 			if (claimCompactionMap == null)
 				throw new ArgumentNullException(nameof(claimCompactionMap));
@@ -83,7 +84,7 @@ namespace CompactSessionSecurityTokens
 
 			if (String.IsNullOrWhiteSpace(endpointId))
 				throw new ArgumentException("Argument cannot be null, empty, or composed entirely of whitespace: 'endpointId'.", nameof(endpointId));
-			
+
 			ClaimsPrincipal compactedPrincipal = new ClaimsPrincipal(
 				principal.Identities.Select(
 					identity => new ClaimsIdentity(
